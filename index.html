@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OS Experience</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Fira+Code:wght@500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            tech: ['"Fira Code"', 'monospace'],
+            modern: ['"Outfit"', 'sans-serif'],
+            cyber: ['"Chakra Petch"', 'sans-serif']
+          },
+          colors: {
+            lime: {
+              300: '#bef264',
+              400: '#a3e635',
+              500: '#84cc16',
+              600: '#65a30d',
+              900: '#365314',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spring-in': 'springIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            'spring-out': 'springOut 0.25s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: 1, boxShadow: '0 0 15px rgba(163, 230, 53, 0.4)' },
+              '50%': { opacity: 0.6, boxShadow: '0 0 5px rgba(163, 230, 53, 0.1)' },
+            },
+            springIn: {
+              '0%': { opacity: '0', transform: 'scale(0.92) translateY(40px)' },
+              '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+            },
+            springOut: {
+              '0%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+              '100%': { opacity: '0', transform: 'scale(0.92) translateY(60px)' },
+            },
+            slideUpOut: {
+              '0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+              '100%': { opacity: '0', transform: 'translateY(-35px) scale(0.92)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      background-color: #030d0f;
+      transition: background-color 0.5s ease;
+    }
+
+    /* Dynamic Wallpaper Themes */
+    .wallpaper-emerald-cyan {
+      background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9) 0%, #030d0f 100%);
+    }
+
+    .wallpaper-cyber-grid {
+      background-color: #030d0f;
+      background-image: 
+        linear-gradient(rgba(6, 182, 212, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .wallpaper-midnight-aurora {
+      background: radial-gradient(circle at 50% -20%, rgba(52, 211, 153, 0.35), transparent 70%),
+                  radial-gradient(circle at 100% 60%, rgba(34, 211, 238, 0.25), transparent 50%),
+                  linear-gradient(180deg, #021217 0%, #01080a 100%);
+    }
+
+    .wallpaper-deep-abyss {
+      background: radial-gradient(ellipse at bottom, #092b30 0%, #030d0f 100%);
+    }
+    
+    .glass-os {
+      background: rgba(8, 24, 28, 0.78);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--theme-border, rgba(52, 211, 153, 0.25));
+    }
+
+    .glass-card {
+      background: rgba(10, 32, 38, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--theme-border, rgba(34, 211, 238, 0.2));
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .glass-card:hover {
+      border-color: var(--theme-accent, rgba(52, 211, 153, 0.5));
+      box-shadow: 0 10px 36px -10px var(--theme-glow, rgba(34, 211, 238, 0.35));
+    }
+
+    .app-icon {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+
+    .app-icon:active {
+      transform: scale(0.88) !important;
+    }
+
+    .app-icon:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 12px 24px -6px var(--theme-glow, rgba(34, 211, 238, 0.35));
+    }
+
+    .app-fullscreen {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+      touch-action: none;
+    }
+
+    .gesture-indicator {
+      box-shadow: 0 0 12px var(--theme-glow, rgba(34, 211, 238, 0.5));
+    }
+
+    /* Dynamic Clock Font Classes */
+    .clock-font-tech { font-family: 'Fira Code', monospace; }
+    .clock-font-modern { font-family: 'Outfit', sans-serif; font-weight: 800; }
+    .clock-font-cyber { font-family: 'Chakra Petch', sans-serif; letter-spacing: 0.05em; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+    ::-webkit-scrollbar-thumb { background: var(--theme-thumb, rgba(52, 211, 153, 0.3)); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--theme-accent, rgba(34, 211, 238, 0.6)); }
+  </style>
+</head>
+<body class="h-full w-full text-slate-100 flex flex-col justify-between relative selection:bg-cyan-400 selection:text-black">
+
+  <!-- Dynamic Animated Wallpaper Layer -->
+  <div id="wallpaperBg" class="fixed inset-0 w-full h-full z-0 transition-all duration-700 wallpaper-emerald-cyan"></div>
+
+  <!-- Top-Left Download Status Toast Notification Pop-up Container -->
+  <div id="toastContainer" class="fixed top-12 left-4 z-[100] space-y-3 pointer-events-auto max-w-xs w-full"></div>
+
+  <!-- Top System Status Bar -->
+  <header class="relative z-40 h-9 px-5 flex items-center justify-between text-xs font-semibold glass-os border-b-0 rounded-b-xl mx-2 mt-1 select-none">
+    <div class="flex items-center space-x-3">
+      <span id="currentTime" class="clock-font-tech text-emerald-300 tracking-wider transition-all">12:00 PM</span>
+      <div class="h-3 w-[1px] bg-cyan-500/30"></div>
+      <span class="flex items-center gap-1.5 text-slate-300">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        Online
+      </span>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <i class="fa-solid fa-wifi text-emerald-400/90 text-xs"></i>
+      <i class="fa-solid fa-bluetooth text-cyan-400 text-xs"></i>
+      <div class="flex items-center space-x-1.5 text-cyan-300">
+        <span class="text-[10px] font-mono">98%</span>
+        <i class="fa-solid fa-battery-three-quarters text-sm text-emerald-400"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bottom Left Open Tabs Counter & Quick Switcher -->
+  <div class="fixed bottom-4 left-4 z-[60]">
+    <button id="openTabsBtn" onclick="toggleTabSwitcher()" class="glass-os px-3.5 py-2 rounded-2xl border border-cyan-400/30 hover:border-cyan-400 text-xs font-semibold flex items-center space-x-2.5 shadow-xl transition active:scale-95 group">
+      <div class="relative flex items-center justify-center">
+        <i class="fa-solid fa-layer-group text-cyan-400 text-sm group-hover:rotate-12 transition-transform"></i>
+        <span id="tabCountBadge" class="absolute -top-2 -right-2 bg-emerald-400 text-slate-950 text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center scale-0 transition-transform shadow-md">0</span>
+      </div>
+      <span class="text-slate-200 hidden sm:inline">Tabs</span>
+      <span id="tabCountText" class="text-cyan-300 font-mono text-[11px] bg-cyan-950/60 px-2 py-0.5 rounded-lg border border-cyan-500/20">0 Open</span>
+    </button>
+
+    <!-- Tab Switcher Popover Tray -->
+    <div id="tabSwitcherMenu" class="hidden absolute bottom-12 left-0 w-72 sm:w-80 glass-os rounded-3xl p-4 border border-cyan-400/40 shadow-2xl space-y-3 animate-spring-in">
+      <div class="flex items-center justify-between border-b border-cyan-500/20 pb-2">
+        <span class="text-xs font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-window-restore text-cyan-400"></i> Active Tabs
+        </span>
+        <button onclick="closeAllTabs()" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 hover:underline">Close All</button>
+      </div>
+      <div id="tabList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Desktop / Homescreen Content -->
+  <main class="relative z-10 flex-1 p-4 md:p-8 flex flex-col justify-between max-w-7xl mx-auto w-full overflow-y-auto">
+    
+    <!-- Top Row: Widgets -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      
+      <!-- Clock & Date Widget -->
+      <div class="glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-cyan-400/90">System Clock</p>
+            <h2 id="widgetDate" class="text-sm font-medium text-slate-300 clock-font-tech">Sunday, August 16</h2>
+          </div>
+          <i class="fa-regular fa-clock text-emerald-400 text-xl"></i>
+        </div>
+        <div class="mt-4">
+          <span id="widgetTime" class="clock-font-tech text-4xl md:text-5xl font-black text-white tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-cyan-200 to-cyan-400 transition-all">12:00:00</span>
+        </div>
+      </div>
+
+      <!-- Quick Notepad Widget -->
+      <div class="glass-card rounded-3xl p-6 flex flex-col justify-between">
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-xs font-semibold uppercase tracking-widest text-emerald-400/90">Quick Note</p>
+          <i class="fa-solid fa-pen-to-square text-cyan-400"></i>
+        </div>
+        <textarea id="quickNoteText" placeholder="Tap to write a quick thought..." class="w-full bg-transparent border-none text-slate-200 text-sm focus:outline-none resize-none h-20 placeholder-slate-500 font-sans"></textarea>
+      </div>
+
+    </div>
+
+    <!-- App Grid Section -->
+    <div class="my-auto py-4">
+      <div id="homescreenGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-6 md:gap-8 justify-items-center">
+        
+        <!-- App: App Store -->
+        <button onclick="openApp('appStore')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-cyan-950 via-slate-900 to-emerald-950 border border-emerald-500/30 flex items-center justify-center shadow-lg group-hover:border-cyan-400 transition">
+            <i class="fa-solid fa-store text-2xl md:text-3xl text-cyan-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-emerald-300">App Store</span>
+        </button>
+
+        <!-- App: Terminal / Dev -->
+        <button onclick="openApp('appTerminal')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-slate-900 via-emerald-950/80 to-cyan-950 border border-cyan-500/30 flex items-center justify-center shadow-lg group-hover:border-emerald-400 transition">
+            <i class="fa-solid fa-terminal text-2xl md:text-3xl text-emerald-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-cyan-300">Terminal</span>
+        </button>
+
+        <!-- App: Metrics -->
+        <button onclick="openApp('appMetrics')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-emerald-950 via-slate-900 to-cyan-950 border border-emerald-500/30 flex items-center justify-center shadow-lg group-hover:border-cyan-400 transition">
+            <i class="fa-solid fa-chart-line text-2xl md:text-3xl text-cyan-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-emerald-300">Metrics</span>
+        </button>
+
+        <!-- App: Canvas / Design Studio -->
+        <button onclick="openApp('appCanvas')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-slate-900 via-cyan-950 to-emerald-950/60 border border-emerald-500/30 flex items-center justify-center shadow-lg group-hover:border-cyan-400 transition">
+            <i class="fa-solid fa-palette text-2xl md:text-3xl text-cyan-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-emerald-300">Studio</span>
+        </button>
+
+        <!-- App: System Files -->
+        <button onclick="openApp('appFiles')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-emerald-950/80 via-cyan-950 to-black border border-cyan-500/30 flex items-center justify-center shadow-lg group-hover:border-emerald-400 transition">
+            <i class="fa-solid fa-folder-open text-2xl md:text-3xl text-emerald-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-cyan-300">Explorer</span>
+        </button>
+
+        <!-- App: System Settings -->
+        <button onclick="openApp('appSettings')" class="app-icon flex flex-col items-center gap-2 group focus:outline-none">
+          <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-slate-900 via-cyan-950 to-emerald-950 border border-emerald-500/30 flex items-center justify-center shadow-lg group-hover:border-cyan-400 transition">
+            <i class="fa-solid fa-gear text-2xl md:text-3xl text-cyan-400"></i>
+          </div>
+          <span class="text-xs font-medium text-slate-200 group-hover:text-emerald-300">Settings</span>
+        </button>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Floating Glass Dock -->
+  <footer class="relative z-40 pb-4 px-4 flex justify-center">
+    <div class="glass-os rounded-3xl px-6 py-3 flex items-center space-x-6 border border-cyan-500/20 shadow-2xl">
+      <button onclick="openApp('appStore')" class="app-icon p-2 text-slate-300 hover:text-cyan-400 transition relative group" title="App Store">
+        <i class="fa-solid fa-store text-2xl"></i>
+        <span class="absolute -top-1 right-1 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span>
+      </button>
+      <button onclick="openApp('appTerminal')" class="app-icon p-2 text-slate-300 hover:text-emerald-400 transition relative group">
+        <i class="fa-solid fa-terminal text-2xl"></i>
+      </button>
+      <button onclick="openApp('appMetrics')" class="app-icon p-2 text-slate-300 hover:text-cyan-400 transition relative group">
+        <i class="fa-solid fa-chart-line text-2xl"></i>
+      </button>
+      <div class="h-8 w-[1px] bg-emerald-500/20"></div>
+      <button onclick="openApp('appFiles')" class="app-icon p-2 text-slate-300 hover:text-cyan-400 transition relative group">
+        <i class="fa-solid fa-folder text-2xl"></i>
+      </button>
+      <button onclick="openApp('appSettings')" class="app-icon p-2 text-slate-300 hover:text-emerald-400 transition relative group">
+        <i class="fa-solid fa-gear text-2xl"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Application Windows Overlay Container (Full Screen Mobile/Tablet View) -->
+  <div id="appOverlay" class="fixed inset-0 pointer-events-none z-50 p-2 sm:p-4 flex items-center justify-center">
+    
+    <!-- APP STORE WINDOW -->
+    <div id="appStore" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-cyan-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-emerald-500/20 flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+          <i class="fa-solid fa-store text-cyan-400"></i> App Store
+        </span>
+        <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="flex-1 p-6 md:p-8 overflow-y-auto space-y-6">
+        <!-- Banner -->
+        <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-cyan-950 border border-cyan-500/30 flex justify-between items-center relative overflow-hidden">
+          <div class="space-y-2 z-10">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Cyber Emerald & Cyan Hub</span>
+            <h3 class="text-2xl md:text-3xl font-extrabold text-white">Curated Web Applications</h3>
+            <p class="text-xs md:text-sm text-slate-400 max-w-lg">Get apps directly inside your workspace without leaving the system experience.</p>
+          </div>
+          <i class="fa-solid fa-rocket text-7xl text-cyan-500/15 absolute -right-4 -bottom-4 transform -rotate-12"></i>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- YouTube -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-red-600/20 text-red-500 flex items-center justify-center text-xl border border-red-500/30"><i class="fa-brands fa-youtube"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">YouTube</h4><p class="text-[11px] text-slate-400">Videos & Stream</p></div>
+            </div>
+            <button id="btn-app-youtube" onclick="handleDownloadApp('youtube', 'YouTube', 'fa-brands fa-youtube', 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- Mail (EduMail) -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl border border-blue-500/30"><i class="fa-solid fa-envelope"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">Mail</h4><p class="text-[11px] text-slate-400">EduMail Webmail</p></div>
+            </div>
+            <button id="btn-app-mail" onclick="handleDownloadApp('mail', 'Mail', 'fa-solid fa-envelope', 'https://edumail.su/')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- ChatGPT -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/30"><i class="fa-solid fa-robot"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">ChatGPT</h4><p class="text-[11px] text-slate-400">AI Assistant</p></div>
+            </div>
+            <button id="btn-app-chatgpt" onclick="handleDownloadApp('chatgpt', 'ChatGPT', 'fa-solid fa-robot', 'chatgpt')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- GitHub -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-xl border border-purple-500/30"><i class="fa-brands fa-github"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">GitHub</h4><p class="text-[11px] text-slate-400">Developer Repos</p></div>
+            </div>
+            <button id="btn-app-github" onclick="handleDownloadApp('github', 'GitHub', 'fa-brands fa-github', 'github')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- Figma -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-pink-600/20 text-pink-400 flex items-center justify-center text-xl border border-pink-500/30"><i class="fa-brands fa-figma"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">Figma</h4><p class="text-[11px] text-slate-400">UI Design Studio</p></div>
+            </div>
+            <button id="btn-app-figma" onclick="handleDownloadApp('figma', 'Figma', 'fa-brands fa-figma', 'figma')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- Spotify -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-green-600/20 text-green-400 flex items-center justify-center text-xl border border-green-500/30"><i class="fa-brands fa-spotify"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">Spotify</h4><p class="text-[11px] text-slate-400">Music & Podcasts</p></div>
+            </div>
+            <button id="btn-app-spotify" onclick="handleDownloadApp('spotify', 'Spotify', 'fa-brands fa-spotify', 'spotify')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+          <!-- VS Code Web -->
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between hover:border-emerald-400/50 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl border border-blue-500/30"><i class="fa-solid fa-code"></i></div>
+              <div><h4 class="text-sm font-semibold text-white">VS Code</h4><p class="text-[11px] text-slate-400">Cloud Code Editor</p></div>
+            </div>
+            <button id="btn-app-vscode" onclick="handleDownloadApp('vscode', 'VS Code', 'fa-solid fa-code', 'https://vscode.dev')" class="px-5 py-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center">GET</button>
+          </div>
+
+        </div>
+      </div>
+      <!-- Swipe Up Gesture Bar -->
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-cyan-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-cyan-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- GENERIC IN-OS WEB / APP VIEWER WINDOW -->
+    <div id="appWebContainer" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-cyan-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/90 border-b border-emerald-500/20 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i id="inAppIcon" class="fa-solid fa-globe text-cyan-400"></i>
+          <span id="inAppTitle" class="text-xs font-semibold text-slate-200">App Viewer</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button onclick="refreshInApp()" class="text-slate-400 hover:text-cyan-300 text-xs"><i class="fa-solid fa-rotate-right"></i></button>
+          <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div id="inAppContent" class="flex-1 bg-black/90 relative overflow-hidden flex flex-col">
+        <!-- Frame / Custom Mock UI generated dynamically -->
+      </div>
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-cyan-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-cyan-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- APP: TERMINAL -->
+    <div id="appTerminal" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-lime-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-lime-500/20 flex items-center justify-between">
+        <span class="text-xs font-mono font-medium text-lime-400"><i class="fa-solid fa-terminal mr-2"></i>Terminal — bash</span>
+        <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="flex-1 p-6 font-mono text-xs text-lime-300 bg-black/80 overflow-y-auto space-y-2" id="terminalConsole">
+        <p class="text-slate-500">// OS Kernel Shell v5.0.0-lime</p>
+        <p class="text-slate-400">Type <span class="text-lime-400 font-bold">'help'</span> for available system commands.</p>
+        <div class="flex items-center space-x-2 pt-2">
+          <span class="text-lime-500">root@os:~#</span>
+          <input type="text" id="termInput" class="bg-transparent border-none text-lime-300 focus:outline-none flex-1 font-mono" autoFocus placeholder="type command...">
+        </div>
+      </div>
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-lime-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-lime-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- APP: METRICS -->
+    <div id="appMetrics" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-lime-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-lime-500/20 flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-chart-line text-lime-400 mr-2"></i>System Telemetry & Metrics</span>
+        <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="flex-1 p-6 md:p-8 overflow-y-auto space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-slate-900/60 border border-lime-500/20">
+            <p class="text-xs text-slate-400">Total Packets</p>
+            <p class="text-3xl font-bold text-lime-400 font-mono mt-1">2,841,090</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-900/60 border border-lime-500/20">
+            <p class="text-xs text-slate-400">Network Speed</p>
+            <p class="text-3xl font-bold text-lime-400 font-mono mt-1">1.2 Gbps</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-900/60 border border-lime-500/20">
+            <p class="text-xs text-slate-400">System Uptime</p>
+            <p class="text-3xl font-bold text-lime-400 font-mono mt-1">99.99%</p>
+          </div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-lime-500/20 space-y-4">
+          <p class="text-xs font-semibold text-slate-300">Realtime Network Throughput Stream</p>
+          <div class="h-56 flex items-end justify-between gap-2 pt-4">
+            <div class="bg-lime-500/40 w-full h-[40%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[65%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[35%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[85%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[55%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[95%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[70%] rounded-t hover:bg-lime-400 transition"></div>
+            <div class="bg-lime-500/40 w-full h-[88%] rounded-t hover:bg-lime-400 transition"></div>
+          </div>
+        </div>
+      </div>
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-lime-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-lime-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- APP: CANVAS / PAINT STUDIO -->
+    <div id="appCanvas" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-lime-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-lime-500/20 flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-palette text-lime-400 mr-2"></i>Paint Studio</span>
+        <div class="flex items-center space-x-4">
+          <button onclick="clearPaintCanvas()" class="text-xs text-lime-400 hover:underline">Clear Canvas</button>
+          <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="flex-1 bg-slate-950 relative">
+        <canvas id="paintCanvas" class="w-full h-full cursor-crosshair"></canvas>
+      </div>
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-lime-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-lime-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- APP: EXPLORER -->
+    <div id="appFiles" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-lime-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-lime-500/20 flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-folder-open text-lime-400 mr-2"></i>File Explorer</span>
+        <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="flex-1 p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-y-auto">
+        <div class="p-6 rounded-2xl bg-slate-900/40 border border-lime-500/10 flex flex-col items-center justify-center gap-3 hover:border-lime-400 transition cursor-pointer">
+          <i class="fa-regular fa-file-code text-4xl text-lime-400"></i>
+          <span class="text-xs text-slate-300 font-mono">system_core.sys</span>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/40 border border-lime-500/10 flex flex-col items-center justify-center gap-3 hover:border-lime-400 transition cursor-pointer">
+          <i class="fa-regular fa-file-image text-4xl text-lime-400"></i>
+          <span class="text-xs text-slate-300 font-mono">wallpaper.png</span>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/40 border border-lime-500/10 flex flex-col items-center justify-center gap-3 hover:border-lime-400 transition cursor-pointer">
+          <i class="fa-regular fa-file-audio text-4xl text-lime-400"></i>
+          <span class="text-xs text-slate-300 font-mono">soundtrack.wav</span>
+        </div>
+      </div>
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-lime-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-lime-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+    <!-- APP: SETTINGS -->
+    <div id="appSettings" class="app-fullscreen hidden pointer-events-auto w-full h-full glass-os rounded-3xl shadow-2xl flex flex-col border border-lime-500/30 overflow-hidden relative">
+      <div class="h-11 px-6 bg-slate-950/80 border-b border-lime-500/20 flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-gear text-lime-400 mr-2"></i>System Preferences</span>
+        <button onclick="closeActiveApp()" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-rose-500/80 transition flex items-center justify-center text-xs text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-w-2xl mx-auto w-full">
+        
+        <!-- Clock Font Option -->
+        <div class="p-5 rounded-2xl bg-slate-900/50 border border-lime-500/20 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white">Clock Font Style</h4>
+              <p class="text-xs text-slate-400">Customize typography for system time</p>
+            </div>
+            <i class="fa-solid fa-font text-lime-400 text-lg"></i>
+          </div>
+          <div class="grid grid-cols-3 gap-3 pt-2">
+            <button onclick="setClockFont('tech')" id="btnFontTech" class="py-2.5 px-3 rounded-xl border border-lime-400 bg-lime-400/20 text-lime-300 font-mono text-xs transition text-center font-bold">
+              Tech Mono
+            </button>
+            <button onclick="setClockFont('modern')" id="btnFontModern" class="py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-300 font-sans text-xs transition text-center font-bold">
+              Modern Sans
+            </button>
+            <button onclick="setClockFont('cyber')" id="btnFontCyber" class="py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-300 font-mono text-xs transition text-center font-bold">
+              Cyber Stencil
+            </button>
+          </div>
+        </div>
+
+        <!-- Color Vibe Preset Options -->
+        <div class="p-5 rounded-2xl bg-slate-900/50 border border-lime-500/20 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white">System Aesthetic Vibe</h4>
+              <p class="text-xs text-slate-400">Switch color accents & ambiance</p>
+            </div>
+            <i class="fa-solid fa-wand-magic-sparkles text-lime-400 text-lg"></i>
+          </div>
+          <div class="grid grid-cols-3 gap-3 pt-2">
+            <button onclick="setThemeVibe('electric-lime')" id="btnVibeLime" class="p-3 rounded-xl border border-lime-400 bg-lime-950/40 flex items-center space-x-2 text-xs font-semibold text-lime-300">
+              <span class="w-3 h-3 rounded-full bg-lime-400"></span>
+              <span>Electric Lime</span>
+            </button>
+            <button onclick="setThemeVibe('cyber-emerald')" id="btnVibeEmerald" class="p-3 rounded-xl border border-slate-700 bg-slate-900/40 flex items-center space-x-2 text-xs font-semibold text-emerald-300">
+              <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+              <span>Cyber Emerald</span>
+            </button>
+            <button onclick="setThemeVibe('neon-cyan')" id="btnVibeCyan" class="p-3 rounded-xl border border-slate-700 bg-slate-900/40 flex items-center space-x-2 text-xs font-semibold text-cyan-300">
+              <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
+              <span>Neon Cyan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- System Wallpaper Switcher -->
+        <div class="p-5 rounded-2xl bg-slate-900/50 border border-cyan-500/20 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white">System Wallpaper</h4>
+              <p class="text-xs text-slate-400">Select dynamic background themes</p>
+            </div>
+            <i class="fa-solid fa-image text-cyan-400 text-lg"></i>
+          </div>
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button onclick="setWallpaper('wallpaper-emerald-cyan')" id="wp1" class="p-3 rounded-xl border border-cyan-400 bg-slate-800/80 text-xs font-semibold text-cyan-300 text-left flex items-center space-x-2">
+              <span class="w-4 h-4 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400"></span>
+              <span>Cyber Aura</span>
+            </button>
+            <button onclick="setWallpaper('wallpaper-cyber-grid')" id="wp2" class="p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-xs font-semibold text-slate-300 text-left flex items-center space-x-2">
+              <span class="w-4 h-4 rounded-full bg-cyan-500/30 border border-cyan-400"></span>
+              <span>Vector Grid</span>
+            </button>
+            <button onclick="setWallpaper('wallpaper-midnight-aurora')" id="wp3" class="p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-xs font-semibold text-slate-300 text-left flex items-center space-x-2">
+              <span class="w-4 h-4 rounded-full bg-gradient-to-b from-emerald-300 to-slate-900"></span>
+              <span>Aurora Borealis</span>
+            </button>
+            <button onclick="setWallpaper('wallpaper-deep-abyss')" id="wp4" class="p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-xs font-semibold text-slate-300 text-left flex items-center space-x-2">
+              <span class="w-4 h-4 rounded-full bg-slate-900 border border-cyan-500/40"></span>
+              <span>Deep Abyss</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <!-- Gesture Bar -->
+      <div class="gesture-bar h-8 bg-black/40 flex items-center justify-center cursor-pointer border-t border-lime-500/10">
+        <div class="w-36 h-1.5 bg-slate-300/40 rounded-full hover:bg-lime-400 transition-colors gesture-indicator"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const appStates = {};
+    let openTabs = []; // Array of active app/tab objects: { id, title, iconClass, type, url }
+
+    function showDownloadToast(id, title, iconClass) {
+      const toastContainer = document.getElementById('toastContainer');
+      if (!toastContainer) return null;
+
+      const toast = document.createElement('div');
+      toast.id = `toast-${id}`;
+      toast.className = 'glass-os p-3.5 rounded-2xl border border-cyan-400/40 shadow-2xl flex flex-col gap-2 transform -translate-x-full transition-all duration-300 animate-spring-in';
+      toast.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-slate-900 border border-cyan-400/30 flex items-center justify-center text-cyan-400 text-sm">
+              <i class="${iconClass}"></i>
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-white">${title}</h5>
+              <p id="toast-status-${id}" class="text-[10px] text-cyan-300 font-mono">Downloading... 0%</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-cloud-arrow-down text-cyan-400 text-xs animate-bounce"></i>
+        </div>
+        <div class="w-full bg-slate-900/90 h-1.5 rounded-full overflow-hidden border border-cyan-500/20">
+          <div id="toast-bar-${id}" class="bg-gradient-to-r from-emerald-400 to-cyan-400 h-full w-0 transition-all duration-100"></div>
+        </div>
+      `;
+
+      toastContainer.appendChild(toast);
+      return toast;
+    }
+
+    function dismissToastSlideUp(toastId) {
+      const toast = document.getElementById(toastId);
+      if (!toast) return;
+
+      toast.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+      toast.style.transform = 'translateY(-40px) scale(0.9)';
+      toast.style.opacity = '0';
+
+      setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+      }, 400);
+    }
+
+    function handleDownloadApp(id, title, iconClass, targetUrl) {
+      const btn = document.getElementById(`btn-app-${id}`);
+      if (!btn) return;
+
+      if (appStates[id] === 'installed') {
+        openInOSApp(id, title, iconClass, targetUrl);
+        return;
+      }
+
+      if (appStates[id] === 'downloading') return;
+
+      appStates[id] = 'downloading';
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-xs"></i>`;
+
+      // Show pop-up banner on top left
+      showDownloadToast(id, title, iconClass);
+
+      const downloadDuration = Math.floor(Math.random() * 3000) + 2500;
+      let startTime = null;
+
+      function stepProgress(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const pct = Math.min(Math.floor((elapsed / downloadDuration) * 100), 100);
+
+        const toastBar = document.getElementById(`toast-bar-${id}`);
+        const toastStatus = document.getElementById(`toast-status-${id}`);
+
+        if (toastBar) toastBar.style.width = `${pct}%`;
+        if (toastStatus) toastStatus.textContent = `Downloading... ${pct}%`;
+
+        if (elapsed < downloadDuration) {
+          requestAnimationFrame(stepProgress);
+        } else {
+          appStates[id] = 'installed';
+          btn.disabled = false;
+          btn.innerHTML = 'OPEN';
+          btn.className = 'px-5 py-2 rounded-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-bold text-xs transition shadow-md min-w-[85px] flex items-center justify-center';
+          
+          if (toastStatus) {
+            toastStatus.textContent = 'Installed • Ready';
+            toastStatus.className = 'text-[10px] text-emerald-400 font-bold font-mono';
+          }
+
+          const toast = document.getElementById(`toast-${id}`);
+          if (toast) {
+            toast.classList.replace('border-cyan-400/40', 'border-emerald-400/60');
+            setTimeout(() => {
+              dismissToastSlideUp(`toast-${id}`);
+            }, 2000);
+          }
+
+          // Add app icon to home screen dynamically
+          addAppToHomescreen(id, title, iconClass, targetUrl);
+        }
+      }
+
+      requestAnimationFrame(stepProgress);
+    }
+
+    function setWallpaper(wpClass) {
+      const bg = document.getElementById('wallpaperBg');
+      if (!bg) return;
+      
+      bg.className = `fixed inset-0 w-full h-full z-0 transition-all duration-700 ${wpClass}`;
+
+      ['wp1', 'wp2', 'wp3', 'wp4'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.classList.remove('border-cyan-400', 'text-cyan-300', 'bg-slate-800/80');
+          btn.classList.add('border-slate-700', 'text-slate-300', 'bg-slate-800/40');
+        }
+      });
+
+      const activeBtnMap = {
+        'wallpaper-emerald-cyan': 'wp1',
+        'wallpaper-cyber-grid': 'wp2',
+        'wallpaper-midnight-aurora': 'wp3',
+        'wallpaper-deep-abyss': 'wp4'
+      };
+
+      const activeBtn = document.getElementById(activeBtnMap[wpClass]);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-slate-700', 'text-slate-300', 'bg-slate-800/40');
+        activeBtn.classList.add('border-cyan-400', 'text-cyan-300', 'bg-slate-800/80');
+      }
+    }
+
+    function addAppToHomescreen(id, title, iconClass, targetUrl) {
+      if (document.getElementById(`hs-app-${id}`)) return;
+      const grid = document.getElementById('homescreenGrid');
+      if (!grid) return;
+
+      const appBtn = document.createElement('button');
+      appBtn.id = `hs-app-${id}`;
+      appBtn.onclick = () => openInOSApp(id, title, iconClass, targetUrl);
+      appBtn.className = 'app-icon flex flex-col items-center gap-2 group focus:outline-none animate-spring-in';
+      appBtn.innerHTML = `
+        <div class="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-cyan-950 via-slate-900 to-emerald-900 border border-cyan-400/50 flex items-center justify-center shadow-lg group-hover:border-emerald-300 transition">
+          <i class="${iconClass} text-2xl md:text-3xl text-cyan-300"></i>
+        </div>
+        <span class="text-xs font-medium text-slate-200 group-hover:text-emerald-300">${title}</span>
+      `;
+      grid.appendChild(appBtn);
+    }
+
+    let currentInAppUrl = '';
+    let currentInAppTitle = '';
+
+    function openInOSApp(id, title, iconClass, targetUrl) {
+      currentInAppUrl = targetUrl;
+      currentInAppTitle = title;
+
+      document.getElementById('inAppTitle').textContent = title;
+      document.getElementById('inAppIcon').className = `${iconClass} text-cyan-400`;
+
+      const container = document.getElementById('inAppContent');
+      container.innerHTML = '';
+
+      if (targetUrl.startsWith('http')) {
+        const iframe = document.createElement('iframe');
+        iframe.src = targetUrl;
+        iframe.className = 'w-full h-full border-none';
+        iframe.onerror = () => renderMockAppView(container, title, iconClass);
+        container.appendChild(iframe);
+      } else {
+        renderMockAppView(container, title, iconClass);
+      }
+
+      registerOpenTab(`web-${id}`, title, iconClass, 'appWebContainer');
+      openApp('appWebContainer');
+    }
+
+    function registerOpenTab(id, title, iconClass, targetAppId) {
+      const existing = openTabs.find(t => t.id === id);
+      if (!existing) {
+        openTabs.push({ id, title, iconClass, targetAppId });
+      }
+      updateTabsUI();
+    }
+
+    function closeTab(id, e) {
+      if (e) e.stopPropagation();
+      const tabIndex = openTabs.findIndex(t => t.id === id);
+      if (tabIndex !== -1) {
+        const tab = openTabs[tabIndex];
+        openTabs.splice(tabIndex, 1);
+        
+        if (activeAppId === tab.targetAppId) {
+          closeActiveApp();
+        }
+      }
+      updateTabsUI();
+    }
+
+    function closeAllTabs() {
+      openTabs = [];
+      closeActiveApp();
+      updateTabsUI();
+      const menu = document.getElementById('tabSwitcherMenu');
+      if (menu) menu.classList.add('hidden');
+    }
+
+    function toggleTabSwitcher() {
+      const menu = document.getElementById('tabSwitcherMenu');
+      if (!menu) return;
+      menu.classList.toggle('hidden');
+    }
+
+    function updateTabsUI() {
+      const countText = document.getElementById('tabCountText');
+      const countBadge = document.getElementById('tabCountBadge');
+      const tabList = document.getElementById('tabList');
+
+      if (countText) countText.textContent = `${openTabs.length} Open`;
+      if (countBadge) {
+        countBadge.textContent = openTabs.length;
+        if (openTabs.length > 0) {
+          countBadge.classList.remove('scale-0');
+          countBadge.classList.add('scale-100');
+        } else {
+          countBadge.classList.remove('scale-100');
+          countBadge.classList.add('scale-0');
+        }
+      }
+
+      if (tabList) {
+        if (openTabs.length === 0) {
+          tabList.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">No active background tabs</p>`;
+        } else {
+          tabList.innerHTML = openTabs.map(tab => `
+            <div onclick="switchTab('${tab.targetAppId}')" class="p-2.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/20 hover:border-cyan-400 transition flex items-center justify-between cursor-pointer group">
+              <div class="flex items-center space-x-2.5 overflow-hidden">
+                <i class="${tab.iconClass} text-cyan-400 text-sm"></i>
+                <span class="text-xs font-semibold text-slate-200 truncate group-hover:text-cyan-300">${tab.title}</span>
+              </div>
+              <button onclick="closeTab('${tab.id}', event)" class="w-5 h-5 rounded-full hover:bg-rose-500/30 text-slate-400 hover:text-rose-300 text-[10px] flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function switchTab(appId) {
+      openApp(appId);
+      const menu = document.getElementById('tabSwitcherMenu');
+      if (menu) menu.classList.add('hidden');
+    }
+
+    function renderMockAppView(container, title, iconClass) {
+      container.innerHTML = `
+        <div class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+          <div class="w-20 h-20 rounded-3xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-4xl text-cyan-400 shadow-2xl">
+            <i class="${iconClass}"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white">${title} Native OS View</h3>
+          <p class="text-xs text-slate-400 max-w-md">Running smoothly in your isolated system environment. All actions and sessions are preserved locally inside the workspace.</p>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/20 text-xs font-mono text-emerald-300 flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span>Process ID: #${Math.floor(Math.random() * 89999 + 10000)} • Active Memory: 42MB</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function refreshInApp() {
+      if (currentInAppUrl) {
+        openInOSApp('appWebContainer', currentInAppTitle, document.getElementById('inAppIcon').className, currentInAppUrl);
+      }
+    }
+
+    let activeAppId = null;
+    let startY = 0;
+    let currentY = 0;
+    let isSwiping = false;
+
+    function openApp(appId) {
+      const appEl = document.getElementById(appId);
+      if (!appEl) return;
+
+      if (activeAppId && activeAppId !== appId) {
+        closeAppImmediate(activeAppId);
+      }
+
+      activeAppId = appId;
+      appEl.classList.remove('hidden');
+      appEl.style.transform = 'translateY(0)';
+      appEl.style.opacity = '1';
+      appEl.classList.remove('animate-spring-out');
+      appEl.classList.add('animate-spring-in');
+
+      // Register standard system apps to active open tabs list
+      const appNames = {
+        'appStore': { name: 'App Store', icon: 'fa-solid fa-store' },
+        'appTerminal': { name: 'Terminal', icon: 'fa-solid fa-terminal' },
+        'appMetrics': { name: 'Metrics', icon: 'fa-solid fa-chart-line' },
+        'appCanvas': { name: 'Studio', icon: 'fa-solid fa-palette' },
+        'appFiles': { name: 'Explorer', icon: 'fa-solid fa-folder-open' },
+        'appSettings': { name: 'Settings', icon: 'fa-solid fa-gear' }
+      };
+
+      if (appNames[appId]) {
+        registerOpenTab(appId, appNames[appId].name, appNames[appId].icon, appId);
+      }
+
+      if (appId === 'appCanvas') {
+        setTimeout(initPaintStudio, 100);
+      }
+    }
+
+    function closeActiveApp() {
+      if (!activeAppId) return;
+      const appEl = document.getElementById(activeAppId);
+      if (!appEl) return;
+
+      appEl.classList.remove('animate-spring-in');
+      appEl.style.transform = 'translateY(100%)';
+      appEl.style.opacity = '0';
+      
+      setTimeout(() => {
+        appEl.classList.add('hidden');
+        appEl.style.transform = '';
+        appEl.style.opacity = '';
+        activeAppId = null;
+      }, 250);
+    }
+
+    function closeAppImmediate(appId) {
+      const appEl = document.getElementById(appId);
+      if (appEl) {
+        appEl.classList.add('hidden');
+        appEl.style.transform = '';
+      }
+    }
+
+    // Touch and Drag Swipe-Up Gesture Handler to close apps
+    document.querySelectorAll('.gesture-bar').forEach(bar => {
+      bar.addEventListener('touchstart', (e) => {
+        isSwiping = true;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      bar.addEventListener('mousedown', (e) => {
+        isSwiping = true;
+        startY = e.clientY;
+      });
+
+      bar.addEventListener('click', () => {
+        closeActiveApp();
+      });
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isSwiping || !activeAppId) return;
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      if (deltaY < 0) {
+        const appEl = document.getElementById(activeAppId);
+        if (appEl) appEl.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, { passive: true });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isSwiping || !activeAppId) return;
+      currentY = e.clientY;
+      const deltaY = currentY - startY;
+      if (deltaY < 0) {
+        const appEl = document.getElementById(activeAppId);
+        if (appEl) appEl.style.transform = `translateY(${deltaY}px)`;
+      }
+    });
+
+    window.addEventListener('touchend', () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const deltaY = currentY - startY;
+      if (deltaY < -80) {
+        closeActiveApp();
+      } else if (activeAppId) {
+        const appEl = document.getElementById(activeAppId);
+        if (appEl) appEl.style.transform = 'translateY(0)';
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const deltaY = currentY - startY;
+      if (deltaY < -80) {
+        closeActiveApp();
+      } else if (activeAppId) {
+        const appEl = document.getElementById(activeAppId);
+        if (appEl) appEl.style.transform = 'translateY(0)';
+      }
+    });
+
+    let clockFontMode = 'tech';
+
+    function setClockFont(fontMode) {
+      clockFontMode = fontMode;
+      const currentTime = document.getElementById('currentTime');
+      const widgetTime = document.getElementById('widgetTime');
+      const widgetDate = document.getElementById('widgetDate');
+
+      [currentTime, widgetTime, widgetDate].forEach(el => {
+        if (!el) return;
+        el.classList.remove('clock-font-tech', 'clock-font-modern', 'clock-font-cyber');
+        el.classList.add(`clock-font-${fontMode}`);
+      });
+
+      ['btnFontTech', 'btnFontModern', 'btnFontCyber'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.classList.remove('border-cyan-400', 'bg-cyan-400/20', 'text-cyan-300');
+        btn.classList.add('border-slate-700', 'bg-slate-800/60', 'text-slate-300');
+      });
+
+      const activeBtnMap = {
+        'tech': 'btnFontTech',
+        'modern': 'btnFontModern',
+        'cyber': 'btnFontCyber'
+      };
+
+      const activeBtn = document.getElementById(activeBtnMap[fontMode]);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-slate-700', 'bg-slate-800/60', 'text-slate-300');
+        activeBtn.classList.add('border-cyan-400', 'bg-cyan-400/20', 'text-cyan-300');
+      }
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const fullTimeStr = now.toLocaleTimeString();
+      const dateStr = now.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+
+      document.getElementById('currentTime').textContent = timeStr;
+      document.getElementById('widgetTime').textContent = fullTimeStr;
+      document.getElementById('widgetDate').textContent = dateStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function setThemeVibe(vibe) {
+      if (vibe === 'electric-lime') {
+        document.body.style.backgroundColor = '#060a05';
+      } else if (vibe === 'cyber-emerald') {
+        document.body.style.backgroundColor = '#030d0f';
+      } else if (vibe === 'neon-cyan') {
+        document.body.style.backgroundColor = '#040a0f';
+      }
+    }
+
+    // Terminal logic
+    const termInput = document.getElementById('termInput');
+    const termConsole = document.getElementById('terminalConsole');
+
+    if (termInput) {
+      termInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const val = termInput.value.trim().toLowerCase();
+          const line = document.createElement('p');
+          line.innerHTML = `<span class="text-cyan-400">root@os:~#</span> ${val}`;
+          termConsole.insertBefore(line, termInput.parentElement);
+
+          const reply = document.createElement('p');
+          reply.className = 'text-slate-300';
+
+          if (val === 'help') {
+            reply.textContent = 'Commands: help, status, clear, font, time';
+          } else if (val === 'status') {
+            reply.textContent = 'OS Status: OPTIMAL. Cyber Emerald + Neon Cyan Core Running.';
+          } else if (val === 'clear') {
+            termConsole.innerHTML = '';
+            termConsole.appendChild(termInput.parentElement);
+            termInput.value = '';
+            return;
+          } else if (val === 'time') {
+            reply.textContent = new Date().toString();
+          } else {
+            reply.textContent = `Command not found: ${val}`;
+          }
+
+          termConsole.insertBefore(reply, termInput.parentElement);
+          termInput.value = '';
+          termConsole.scrollTop = termConsole.scrollHeight;
+        }
+      });
+    }
+
+    // Paint Studio Logic
+    let isDrawing = false;
+    function initPaintStudio() {
+      const pCanvas = document.getElementById('paintCanvas');
+      if (!pCanvas) return;
+      const pCtx = pCanvas.getContext('2d');
+      pCanvas.width = pCanvas.parentElement.clientWidth;
+      pCanvas.height = pCanvas.parentElement.clientHeight;
+
+      pCanvas.onmousedown = (e) => { isDrawing = true; pCtx.beginPath(); pCtx.moveTo(e.offsetX, e.offsetY); };
+      pCanvas.onmousemove = (e) => {
+        if (isDrawing) {
+          pCtx.lineTo(e.offsetX, e.offsetY);
+          pCtx.strokeStyle = '#22d3ee';
+          pCtx.lineWidth = 3;
+          pCtx.lineCap = 'round';
+          pCtx.stroke();
+        }
+      };
+      pCanvas.onmouseup = () => { isDrawing = false; };
+    }
+
+    function clearPaintCanvas() {
+      const pCanvas = document.getElementById('paintCanvas');
+      if (!pCanvas) return;
+      const pCtx = pCanvas.getContext('2d');
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    }
+
+    let isPlaying = true;
+    function togglePlay() {
+      const btn = document.getElementById('playBtn');
+      isPlaying = !isPlaying;
+      if (btn) {
+        btn.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+      }
+    }
+  </script>
+</body>
+</html>
